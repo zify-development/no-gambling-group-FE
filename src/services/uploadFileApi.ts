@@ -2,7 +2,9 @@ import axios from "axios";
 
 export const getProfileImage = {
   get: async () => {
-    let res = await axios.get(`http://localhost:5000/api/user/images`);
+    let res = await axios.get(
+      `https://no-gamling-group-api.herokuapp.com/api/user/images`
+    );
     return res.data;
   },
 };
@@ -12,7 +14,7 @@ export const uploadProfileImage = {
     const formData = new FormData();
     formData.append("image", file);
     let res = await axios.post(
-      `http://localhost:5000/api/user/image`,
+      `https://no-gamling-group-api.herokuapp.com/api/user/image`,
       formData,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -27,7 +29,7 @@ export const updateProfileImage = {
     const formData = new FormData();
     formData.append("image", file);
     let res = await axios.put(
-      `http://localhost:5000/api/user/image`,
+      `https://no-gamling-group-api.herokuapp.com/api/user/image`,
       formData,
       {
         headers: { Authorization: `Bearer ${token}` },

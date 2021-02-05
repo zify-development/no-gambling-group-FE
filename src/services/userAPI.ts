@@ -15,18 +15,24 @@ export interface IFChangePassword {
 
 export const getAll = {
   get: async (token: string) => {
-    let res = await axios.get(`http://localhost:5000/api/users`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    let res = await axios.get(
+      `https://no-gamling-group-api.herokuapp.com/api/users`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return res.data;
   },
 };
 
 export const getUserDataByToken = {
   getData: async (token: string) => {
-    let res = await axios.get(`http://localhost:5000/api/user`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    let res = await axios.get(
+      `https://no-gamling-group-api.herokuapp.com/api/user`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return res.data;
   },
 };
@@ -39,7 +45,7 @@ export const createUser = {
       createdDate: new Date(),
     };
     let res = await axios.post(
-      `http://localhost:5000/api/user/register`,
+      `https://no-gamling-group-api.herokuapp.com/api/user/register`,
       currentData
     );
     return res.data;
@@ -48,16 +54,23 @@ export const createUser = {
 
 export const loginUser = {
   login: async (data: IFUser) => {
-    let res = await axios.post(`http://localhost:5000/api/user/login`, data);
+    let res = await axios.post(
+      `https://no-gamling-group-api.herokuapp.com/api/user/login`,
+      data
+    );
     return res.data;
   },
 };
 
 export const updateUser = {
   update: async (data: IFUser, token: string) => {
-    let res = await axios.put(`http://localhost:5000/api/user`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    let res = await axios.put(
+      `https://no-gamling-group-api.herokuapp.com/api/user`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return res.data;
   },
 };
@@ -65,7 +78,7 @@ export const updateUser = {
 export const updatePassword = {
   update: async (data: IFChangePassword, token: string) => {
     let res = await axios.put(
-      `http://localhost:5000/api/user/changePassword`,
+      `https://no-gamling-group-api.herokuapp.com/api/user/changePassword`,
       data,
       {
         headers: { Authorization: `Bearer ${token}` },
