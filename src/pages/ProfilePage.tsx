@@ -20,7 +20,7 @@ import AdminSection from "../components/AdminSection";
 import ProfileAvatar from "../components/Avatar";
 import Sidebar from "../components/Sidebar";
 import UserCalendar from "../components/UserCalendar";
-import VideoDiary from "../components/VideoDiary";
+import News from "../components/News";
 
 export interface IFUserData {
   email?: string;
@@ -202,7 +202,7 @@ const ProfilePage = () => {
         <Route path="/profile/settings" component={Settings} />
         <Route path="/profile/changePassword" component={ChangePassword} />
         <Route path="/profile/calendar" component={UserCalendar} />
-        <Route path="/profile/videoDiary" component={VideoDiary} />
+        <Route path="/profile/news" component={News} />
         {admin && <Route path="/profile/admin" component={AdminSection} />}
       </Switch>
     );
@@ -216,6 +216,9 @@ const ProfilePage = () => {
         <Grid className={classes.container} container>
           <Grid item xs={12}>
             <Paper className={classes.paper}>{renderProfileRoutes()}</Paper>
+            {/* <div>
+              <Button
+            </div> */}
           </Grid>
         </Grid>
       </Sidebar>

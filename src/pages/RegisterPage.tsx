@@ -81,7 +81,7 @@ const RegisterPage = () => {
       if (token && !login.error) {
         if (data) {
           Cookies.set("token", token);
-          history.push("/profile/info");
+          history.push("/profile/news");
         }
       }
     }

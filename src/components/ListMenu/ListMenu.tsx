@@ -7,11 +7,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import VideocamIcon from "@material-ui/icons/Videocam";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import FeedbackIcon from "@material-ui/icons/Feedback";
 import {
   InfoOutlined,
   // Settings,
   Lock,
-  PowerSettingsNew,
+  // PowerSettingsNew,
   SupervisorAccount,
 } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
@@ -47,13 +49,21 @@ const ListMenu = () => {
   const admin = userStore.data?.role === "admin";
   return (
     <div className={classes.root}>
-      <List component="nav" aria-label="main mailbox folders">
+      <List component="nav" aria-label="main">
+        <Link className={classes.link} to="/profile/news">
+          <ListItem classes={{ root: classes.listItem }} button>
+            <ListItemIcon>
+              <FeedbackIcon />
+            </ListItemIcon>
+            <ListItemText primary="Novinky" />
+          </ListItem>
+        </Link>
         <Link className={classes.link} to="/profile/info">
           <ListItem classes={{ root: classes.listItem }} button>
             <ListItemIcon>
               <InfoOutlined />
             </ListItemIcon>
-            <ListItemText primary="Informace" />
+            <ListItemText primary="Profil" />
           </ListItem>
         </Link>
         {/* <Link className={classes.link} to="/profile/settings">
@@ -80,14 +90,6 @@ const ListMenu = () => {
             <ListItemText primary="Můj kalendář" />
           </ListItem>
         </Link>
-        <Link className={classes.link} to="/profile/videoDiary">
-          <ListItem classes={{ root: classes.listItem }} button>
-            <ListItemIcon>
-              <VideocamIcon />
-            </ListItemIcon>
-            <ListItemText primary="Můj video deník" />
-          </ListItem>
-        </Link>
         {admin && (
           <>
             <Link className={classes.link} to="/profile/admin">
@@ -103,7 +105,7 @@ const ListMenu = () => {
         <div className={classes.link} onClick={() => logOutUser()}>
           <ListItem classes={{ root: classes.listItem }} button>
             <ListItemIcon>
-              <PowerSettingsNew />
+              <ExitToAppIcon />
             </ListItemIcon>
             <ListItemText primary="Odhlášení" />
           </ListItem>

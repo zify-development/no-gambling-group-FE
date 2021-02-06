@@ -78,7 +78,7 @@ const SignInPage = () => {
     const token = login.data?.token;
     if (token && !login.error) {
       Cookies.set("token", token);
-      history.push("/profile/info");
+      history.push("/profile/news");
     } else {
       enqueueSnackbar(notification.message, { variant: notification.type });
     }
