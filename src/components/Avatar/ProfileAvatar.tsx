@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const ProfileAvatar = (props: IFProfileAvatarProps) => {
   const { email, style, image } = props;
   const classes = useStyles();
-  console.warn(image, "image");
   const upperCasedEmail = email && email.toUpperCase();
   return (
     <div className={classes.root}>

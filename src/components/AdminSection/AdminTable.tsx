@@ -86,9 +86,7 @@ export const AdminTable = (props: IFAdminTableProps) => {
                 {row.email}
               </TableCell>
               <TableCell align="left" style={{ width: 100 }}>
-                {moment(row.createdDate.toString())
-                  .subtract(10, "days")
-                  .calendar()}
+                {moment(row.createdDate.toString()).format("DD/MM/YYYY HH:mm")}
               </TableCell>
               <TableCell align="left" style={{ width: 100 }}>
                 <FormControlLabel

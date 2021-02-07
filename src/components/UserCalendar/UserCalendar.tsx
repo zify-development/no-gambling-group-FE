@@ -78,8 +78,6 @@ const UserCalendar = () => {
 
   const onClickSchedule = useCallback((e) => {
     const { calendarId, id } = e.schedule;
-    // console.warn(e.schedule, "hghghghg");
-    // console.warn(e, "eeee");
   }, []);
 
   const onBeforeCreateSchedule = useCallback(async (scheduleData) => {
@@ -126,7 +124,6 @@ const UserCalendar = () => {
       changes && changes.start ? changes.start._date : schedule.start._date;
     let end = changes && changes.end ? changes.end._date : schedule.end._date;
 
-    console.warn(changes, "upppp");
     const updateEvent = {
       ...schedule,
       ...changes,
@@ -143,7 +140,6 @@ const UserCalendar = () => {
     }
   }, []);
 
-  console.warn(events, "events");
   return (
     <div className={classes.root}>
       <Typography variant="h4" align="center" color="textPrimary">

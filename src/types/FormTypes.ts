@@ -14,4 +14,12 @@ export interface IFUserInfoFormValues {
   lastName?: string;
   age?: number | null;
   imageUrl?: string;
+  id?: string;
+}
+
+export interface IFUserNews {
+  newsDescription?: string;
+  titleNews?: string;
+  createdDateNews?: Date;
+  authorNews?: string;
 }

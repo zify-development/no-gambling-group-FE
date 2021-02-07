@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Paper, Typography, Button } from "@material-ui/core";
+import {
+  Grid,
+  Paper,
+  Typography,
+  Button,
+  Card,
+  CardHeader,
+  Avatar,
+  IconButton,
+  CardContent,
+  CardActions,
+} from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useSnackbar } from "notistack";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import PublishIcon from "@material-ui/icons/Publish";
 import EditIcon from "@material-ui/icons/Edit";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 import UserInfoFormik from "../components/Forms/UserInfoFormik";
 import { getUserDataByToken } from "../services/userAPI";
 import { getUserInfo } from "../services/userInfoAPI";
+import { getUserNews } from "../services/userNewsAPI";
 import {
   uploadProfileImage,
   updateProfileImage,
@@ -21,6 +36,9 @@ import ProfileAvatar from "../components/Avatar";
 import Sidebar from "../components/Sidebar";
 import UserCalendar from "../components/UserCalendar";
 import News from "../components/News";
+import NewsFormik from "../components/Forms/NewsFormik";
+import { IFUserNews } from "../types/FormTypes";
+import moment from "moment";
 
 export interface IFUserData {
   email?: string;
@@ -61,7 +79,38 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: "10px",
     },
     label: {
-      marginBottom: "50px",
+      marginBottom: "25px",
+    },
+    profileHeader: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      borderBottom: "2px solid #d3d3d3",
+    },
+    profileInfo: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      borderBottom: "2px solid #d3d3d3",
+      marginTop: "25px",
+    },
+    profileNews: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "25px",
+    },
+    avatar: {
+      width: "60px",
+      height: "60px",
+      fontSize: "0.8rem",
+      backgroundColor: "#000",
     },
   })
 );
@@ -71,6 +120,7 @@ const ProfilePage = () => {
   const userStore = useUserData().context.userData;
   const userInfoStore = useUserData().context.userInfoData;
   const [updateForm, setUpdateForm] = useState(false);
+  const [myNews, setMyNews] = useState<IFUserNews[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const token = Cookies.get("token");
 
@@ -96,10 +146,23 @@ const ProfilePage = () => {
     }
   };
 
+  const getMyNews = async () => {
+    if (token) {
+      const data = await getUserNews.get(token);
+      if (data) {
+        setMyNews(data);
+      }
+    } else {
+      return;
+    }
+  };
+
   useEffect(() => {
     getUserInfoData();
     getUserData();
+    getMyNews();
   }, []);
+
   const renderUserData = () => {
     return (
       <Grid item xs={12}>
@@ -154,41 +217,117 @@ const ProfilePage = () => {
     }
   };
 
+  const renderMyNewsItem = (news?: IFUserNews[]) => {
+    let newsItem;
+    if (news && news.length) {
+      newsItem = news?.map((item, index) => {
+        return (
+          <Grid item>
+            <Card key={index}>
+              <CardHeader
+                avatar={
+                  <Avatar aria-label="recipe" className={classes.avatar}>
+                    {item.authorNews}
+                  </Avatar>
+                }
+                action={
+                  <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={item.titleNews}
+                subheader={
+                  item.createdDateNews &&
+                  moment(item.createdDateNews.toString()).format(
+                    "DD/MM/YYYY HH:mm"
+                  )
+                }
+              />
+              <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {item.newsDescription}
+                </Typography>
+              </CardContent>
+              <CardActions disableSpacing>
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="share">
+                  <ShareIcon />
+                </IconButton>
+              </CardActions>
+            </Card>
+          </Grid>
+        );
+      });
+    } else {
+      newsItem = <div>Nebyly nalezeny žádné moje příspěvky</div>;
+    }
+
+    return newsItem;
+  };
+
+  const handleForm = () => {
+    getMyNews();
+  };
+
   const UserInfo = () => {
     return (
       <>
-        <ProfileAvatar
-          email={userStore.data?.email}
-          image={userInfoStore.infoData?.imageUrl}
-          style={{
-            fontSize: "70px",
-            width: "200px",
-            height: "200px",
-          }}
-        />
-        <input
-          accept="image/*"
-          hidden
-          id="avatar-image-upload"
-          type="file"
-          onChange={(e) => handleUploadImage(e)}
-        />
-        <label className={classes.label} htmlFor="avatar-image-upload">
-          <Button variant="contained" color="primary" component="span">
-            {userInfoStore.infoData?.imageUrl ? (
-              <EditIcon className={classes.iconMargin} />
-            ) : (
-              <PublishIcon className={classes.iconMargin} />
-            )}
-            {userInfoStore.infoData?.imageUrl ? "Změnit" : "Nahrát"}
-          </Button>
-        </label>
-        <Typography variant="h4" align="center" color="textPrimary">
-          Osobní informace
-        </Typography>
-        {userInfoStore.infoData?.firstName && !updateForm
-          ? renderUserData()
-          : renderUserFormik()}
+        <div className={classes.profileHeader}>
+          <ProfileAvatar
+            email={userStore.data?.email}
+            image={userInfoStore.infoData?.imageUrl}
+            style={{
+              fontSize: "70px",
+              width: "200px",
+              height: "200px",
+            }}
+          />
+          <input
+            accept="image/*"
+            hidden
+            id="avatar-image-upload"
+            type="file"
+            onChange={(e) => handleUploadImage(e)}
+          />
+          <label className={classes.label} htmlFor="avatar-image-upload">
+            <Button variant="contained" color="primary" component="span">
+              {userInfoStore.infoData?.imageUrl ? (
+                <EditIcon className={classes.iconMargin} />
+              ) : (
+                <PublishIcon className={classes.iconMargin} />
+              )}
+              {userInfoStore.infoData?.imageUrl ? "Změnit" : "Nahrát"}
+            </Button>
+          </label>
+        </div>
+        <div className={classes.profileInfo}>
+          <Typography variant="h4" align="center" color="textPrimary">
+            Osobní informace
+          </Typography>
+          {userInfoStore.infoData?.firstName && !updateForm
+            ? renderUserData()
+            : renderUserFormik()}
+        </div>
+        <div className={classes.profileNews}>
+          <Typography variant="h4" align="center" color="textPrimary">
+            Moje příspěvky
+          </Typography>
+          <NewsFormik
+            formValues={{}}
+            userToken={token}
+            handleChange={() => handleForm()}
+            handleNotification={(notification) =>
+              enqueueSnackbar(notification.message, {
+                variant: notification.type,
+              })
+            }
+          />
+          <Grid container justify="center" spacing={2}>
+            {renderMyNewsItem(myNews)}
+          </Grid>
+        </div>
       </>
     );
   };
